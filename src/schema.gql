@@ -1,0 +1,90 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  fullName: String!
+  email: String!
+  roles: [String!]!
+  isActive: Boolean!
+  lastUpdatedBy: User
+  complaints: [Complaint!]
+  complaintCount: Int!
+}
+
+type Complaint {
+  id: ID!
+  title: String!
+  description: String!
+  details: String!
+  solved: Boolean!
+  user: User!
+}
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+type Query {
+  complaints: [Complaint!]!
+  complaint(id: ID!): Complaint!
+  users(roles: [String!] = []): [User!]!
+  user(id: ID!): User!
+  revalidate: AuthResponse!
+}
+
+type Mutation {
+  createComplaint(createComplaintInput: CreateComplaintInput!): Complaint!
+  updateComplaint(updateComplaintInput: UpdateComplaintInput!): Complaint!
+  removeComplaint(id: Int!): Complaint!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  deactivateUser(id: ID!): User!
+  signUp(signUpInput: SignUpInput!): AuthResponse!
+  logIn(logInInput: LogInInput!): AuthResponse!
+}
+
+input CreateComplaintInput {
+  title: String!
+  description: String!
+  details: String! = "Sin detalles - A implementar"
+  solved: Boolean! = false
+}
+
+input UpdateComplaintInput {
+  title: String
+  description: String
+  details: String = "Sin detalles - A implementar"
+  solved: Boolean = false
+  id: Float!
+}
+
+input UpdateUserInput {
+  email: String
+  fullName: String
+  password: String
+  id: ID!
+  roles: [ValidRoles!]
+  isActive: Boolean
+}
+
+"""
+These are the roles that have been set for the application, being "admin" the type of role with more permissions.
+"""
+enum ValidRoles {
+  admin
+  user
+  superUser
+}
+
+input SignUpInput {
+  email: String!
+  fullName: String!
+  password: String!
+}
+
+input LogInInput {
+  email: String!
+  password: String!
+}
