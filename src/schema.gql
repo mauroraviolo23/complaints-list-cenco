@@ -43,6 +43,9 @@ type Mutation {
   deactivateUser(id: ID!): User!
   signUp(signUpInput: SignUpInput!): AuthResponse!
   logIn(logInInput: LogInInput!): AuthResponse!
+
+  """Executes the construction of the Database"""
+  executeSeed: String!
 }
 
 input CreateComplaintInput {

@@ -11,4 +11,5 @@
 3. Ejecutar ```yarn install```
 4. Levantar la imagen en Docker Desktop con el comando: ```docker-compose up -d```
 5. Levantar el Back-End de Nest con el comando: ```yarn start:dev``` 
-6. Visitar el sitio: ```localhost:3000/graphql``` 
+6. Visitar el sitio: ```localhost:3000/graphql```
+7. Ejecutar la __'mutacion'__ executeSeed, para ingresar datos de ejemplo en la Base de Datos
