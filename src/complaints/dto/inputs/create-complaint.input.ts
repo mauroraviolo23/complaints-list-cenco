@@ -14,9 +14,21 @@ export class CreateComplaintInput {
   @IsNotEmpty()
   description: string;
 
-  @Field( () => String, { defaultValue: "Sin detalles - A implementar" } )
+  // @Field( () => String, { defaultValue: "Sin detalles - A implementar" } )
+  // @IsString()
+  // details: string;
+
+  @Field( () => String )
   @IsString()
-  details: string;
+  dateOfPurchase: string;
+
+  @Field( () => String )
+  @IsString()
+  invoiceNumber: string;
+
+  @Field( () => String )
+  @IsString()
+  productCode: string;
 
   @Field( () => Boolean, { defaultValue: false } )
   @IsBoolean()

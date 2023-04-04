@@ -33,31 +33,41 @@ export const SEED_COMPLAINTS = [
     {
         title: "No me funciona el control remoto",
         description: "El control remoto de mi aire acondicionado DEJÓ DE FUNCIONAR!!!. Aún está en garantía",
-        details: "x",
+        dateOfPurchase: "25-02-2022",
+        invoiceNumber: "1292943020",
+        productCode: "AOBE1020",
         solved: false
     },
     {
         title: "Cómo usar las funciones de mi Smart TV???",
         description: "Quisiera recibir ayuda o un manual para poder aprender a usar las funciones de mi Smart TV",
-        details: "x",
+        dateOfPurchase: "20-09-2021",
+        invoiceNumber: "1292778920",
+        productCode: "SSKW3031",
         solved: false
     },
     {
         title: "No recibí respuestas a mi solicitud",
         description: "La semana pasada solicité un servicio para mi microondas, me dijeron que me iban a llamar para coordinar el horario y nunca lo hicieron.",
-        details: "x",
+        dateOfPurchase: "17-01-2023",
+        invoiceNumber: "396758201",
+        productCode: "SOEL5591",
         solved: false
     },
     {
         title: "Como puedo solicitar ayuda telefónica?",
         description: "No encuentro el número de teléfono para pedir asistencia por este medio",
-        details: "x",
+        dateOfPurchase: "04-03-2023",
+        invoiceNumber: "2033571245",
+        productCode: "FTLC2242",
         solved: false
     },
     {
         title: "Tengo un problema con mi cafetera",
         description: "Mi cafetera funciona mal desde hace una semana, debo llevarla al servicio o vienen a domicilio? Gracias",
-        details: "x",
+        dateOfPurchase: "25-02-2020",
+        invoiceNumber: "5068940523",
+        productCode: "XCMV1130",
         solved: false
     }
 

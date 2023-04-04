@@ -51,14 +51,18 @@ type Mutation {
 input CreateComplaintInput {
   title: String!
   description: String!
-  details: String! = "Sin detalles - A implementar"
+  dateOfPurchase: String!
+  invoiceNumber: String!
+  productCode: String!
   solved: Boolean! = false
 }
 
 input UpdateComplaintInput {
   title: String
   description: String
-  details: String = "Sin detalles - A implementar"
+  dateOfPurchase: String
+  invoiceNumber: String
+  productCode: String
   solved: Boolean = false
   id: Float!
 }
@@ -78,7 +82,6 @@ These are the roles that have been set for the application, being "admin" the ty
 enum ValidRoles {
   admin
   user
-  superUser
 }
 
 input SignUpInput {

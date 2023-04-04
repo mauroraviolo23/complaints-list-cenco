@@ -47,6 +47,23 @@ export class ComplaintsService {
     });
   }
 
+  async findAllByUser( user: User, paginationArgs: PaginationArgs, searchArgs: SearchArgs ): Promise<Complaint[]> {
+
+    const { limit, offset } = paginationArgs;
+    const { search } = searchArgs;
+
+    return await this.complaintsRepository.find({
+      take: limit, 
+      skip: offset,
+      where: {
+        user: {
+          id: user.id
+        },
+        title: ILike(`%${ search }%`)
+      }
+    });
+  }
+
   async findOne(id: number, user: User): Promise<Complaint> {
 
     let complaint: Complaint;
@@ -68,11 +85,14 @@ export class ComplaintsService {
   }
 
   async create( createComplaintInput: CreateComplaintInput, user: User ) : Promise<Complaint> {
+
+    const productDetails: string = createComplaintInput.dateOfPurchase + "," + createComplaintInput.invoiceNumber + "," + createComplaintInput.productCode;
     
     const newComplaint = this.complaintsRepository
     .create({
+      details: productDetails,
+      user,
       ...createComplaintInput,
-      user
     });
 
     return await this.complaintsRepository.save( newComplaint );

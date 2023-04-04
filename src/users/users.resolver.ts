@@ -71,6 +71,6 @@ export class UsersResolver {
     @Args() paginationArgs: PaginationArgs,
     @Args() searchArgs: SearchArgs,
   ): Promise<Complaint[]> {
-    return this.complaintsService.findAll( user, paginationArgs, searchArgs );
+    return this.complaintsService.findAllByUser( user, paginationArgs, searchArgs );
   }
 }
