@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
+import { ListByUserArgs } from 'src/common/dto/args/list.args';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { CreateComplaintInput } from './dto/inputs/create-complaint.input';
 import { UpdateComplaintInput } from './dto/inputs/update-complaint.input';
 import { Complaint } from './entities/complaint.entity';
@@ -15,20 +17,32 @@ export class ComplaintsService {
     private readonly complaintsRepository: Repository<Complaint>
   ) {}
 
-  async findAll( user: User ): Promise<Complaint[]> {
+  async findAll( user: User, paginationArgs: PaginationArgs, searchArgs: SearchArgs ): Promise<Complaint[]> {
+
+    const { limit, offset } = paginationArgs;
+    const { search } = searchArgs;
 
     // The following "if" clause is generated so that if an admin runs this Query,
     // all complaints will be shown. If it were a regular user, only complaints from his authorship would be shown.
 
     if (user.roles.includes(ValidRoles.admin)) {
-      return this.complaintsRepository.find();
+      return await this.complaintsRepository.find({
+        take: limit, 
+        skip: offset,
+        where: {
+          title: ILike(`%${ search }%`)
+        }
+      });
     }
 
-    return this.complaintsRepository.find({
+    return await this.complaintsRepository.find({
+      take: limit, 
+      skip: offset,
       where: {
         user: {
           id: user.id
-        }
+        },
+        title: ILike(`%${ search }%`)
       }
     });
   }
@@ -49,10 +63,6 @@ export class ComplaintsService {
     }
 
     if ( !complaint ) throw new NotFoundException(`Complaint with id:${id} not found`);
-
-    // console.log(
-    //   typeof complaint.id
-    // )
 
     return complaint;
   }
@@ -79,13 +89,13 @@ export class ComplaintsService {
     return this.complaintsRepository.save( complaint );
   }
 
-  async remove(id: number, user: User): Promise<Complaint> {
+  async remove(id: number, user: User) {
     
     const complaint = await this.findOne( id, user );
 
-    await this.complaintsRepository.remove( complaint );
+    console.log(complaint);
 
-    return { ...complaint, id };
+    return this.complaintsRepository.remove( complaint );
   }
 
   async complaintCountByUser( user: User ): Promise<number> {
@@ -98,4 +108,5 @@ export class ComplaintsService {
       }
     })
   }
+
 }

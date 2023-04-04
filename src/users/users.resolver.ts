@@ -9,6 +9,9 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ComplaintsService } from 'src/complaints/complaints.service';
+import { Complaint } from 'src/complaints/entities/complaint.entity';
+import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
+import { ListByUserArgs } from 'src/common/dto/args/list.args';
 
 @Resolver(() => User)
 @UseGuards( JwtAuthGuard )
@@ -59,5 +62,15 @@ export class UsersResolver {
     @Parent() user: User
   ): Promise<number> {
     return this.complaintsService.complaintCountByUser( user );
+  }
+
+  @ResolveField( () => [Complaint], { name: 'complaints'})
+  async getComplaintsByUser(
+    @CurrentUser( [ValidRoles.admin] ) adminUser: User,
+    @Parent() user: User,
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs,
+  ): Promise<Complaint[]> {
+    return this.complaintsService.findAll( user, paginationArgs, searchArgs );
   }
 }

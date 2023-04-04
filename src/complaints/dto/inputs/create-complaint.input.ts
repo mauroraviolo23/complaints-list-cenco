@@ -7,7 +7,6 @@ export class CreateComplaintInput {
   @Field( () => String )
   @IsString()
   @IsNotEmpty()
-  @IsIn(['Falla', 'Consulta', 'Reclamo'])
   title: string;
 
   @Field( () => String )

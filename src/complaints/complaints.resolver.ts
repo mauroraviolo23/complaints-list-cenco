@@ -6,6 +6,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
 
 @Resolver(() => Complaint)
 @UseGuards( JwtAuthGuard )
@@ -14,9 +15,11 @@ export class ComplaintsResolver {
 
   @Query(() => [Complaint], { name: 'complaints' })
   async findAll(
-    @CurrentUser() user: User
+    @CurrentUser() user: User,
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs,
   ): Promise<Complaint[]> {
-    return this.complaintsService.findAll(user);
+    return this.complaintsService.findAll(user, paginationArgs, searchArgs);
   }
 
   @Query(() => Complaint, { name: 'complaint' })
@@ -40,14 +43,14 @@ export class ComplaintsResolver {
     @Args('updateComplaintInput') updateComplaintInput: UpdateComplaintInput,
     @CurrentUser() user: User
     ): Promise<Complaint> {
-    return this.complaintsService.update(+updateComplaintInput.id, updateComplaintInput, user);
+    return this.complaintsService.update(updateComplaintInput.id, updateComplaintInput, user);
   }
 
   @Mutation(() => Complaint)
   removeComplaint(
     @Args('id', { type: () => Int }) id: number,
     @CurrentUser() user: User
-    ): Promise<Complaint> {
+    ) {
     return this.complaintsService.remove(id, user);
   }
 }

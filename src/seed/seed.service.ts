@@ -38,9 +38,9 @@ export class SeedService {
 
         await this.deleteDatabaseValues();
 
-        const user = await this.loadUsers();
+        const users = await this.loadUsers();
 
-        await this.loadComplaints(user);
+        await this.loadComplaints(users);
 
         return 'Seed executed successfully'
 
@@ -60,7 +60,7 @@ export class SeedService {
         
     }
 
-    async loadUsers(): Promise<User> {
+    async loadUsers(): Promise<User[]> {
 
         const users = [];
 
@@ -68,17 +68,24 @@ export class SeedService {
             users.push( await this.usersService.create( user ) )
         }
 
-        return users[0];
+        return users;
 
     }
 
-    async loadComplaints( user: User ): Promise<void> {
+    async loadComplaints( users: User[] ): Promise<void> {
 
         const complaintsPromises = [];
 
-        for ( const complaint of SEED_COMPLAINTS ) {
-            complaintsPromises.push( this.complaintsService.create( complaint, user ))
-        }
+        const complaintsServ = this.complaintsService;
+        
+        SEED_COMPLAINTS.forEach(function (complaint, index) {
+
+            if ( index % 2 !== 0 ) {
+                complaintsPromises.push( complaintsServ.create( complaint, users[0] ));
+            } else {
+                complaintsPromises.push( complaintsServ.create( complaint, users[1] ));
+            }
+        }) 
 
         await Promise.all( complaintsPromises );
 
