@@ -69,6 +69,30 @@ export const SEED_COMPLAINTS = [
         invoiceNumber: "5068940523",
         productCode: "XCMV1130",
         solved: false
+    },
+    {
+        title: "Mi frazada térmica no calienta",
+        description: "La prendo y no da calor, me pregunto si debería arreglarla o comprar una nueva. Podrían llamarme para asesorarme? Gracias",
+        dateOfPurchase: "09-12-2018",
+        invoiceNumber: "5225540523",
+        productCode: "ASKK9339",
+        solved: false
+    },
+    {
+        title: "Necesito reparación para mi heladera Phillips",
+        description: "El freezer no congela",
+        dateOfPurchase: "27-01-2015",
+        invoiceNumber: "0395560429",
+        productCode: "LSKC3029",
+        solved: false
+    },
+    {
+        title: "Mi televisión tiene los colores distorsionados",
+        description: "Hace un tiempo que mi TV presenta problemas con el color, a qué se puede deber?",
+        dateOfPurchase: "18-04-2016",
+        invoiceNumber: "2200454502",
+        productCode: "MBVM2929",
+        solved: false
     }
 
 ]
