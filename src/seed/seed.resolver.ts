@@ -7,13 +7,11 @@ import { User } from 'src/users/entities/user.entity';
 import { SeedService } from './seed.service';
 
 @Resolver()
-@UseGuards( JwtAuthGuard )
 export class SeedResolver {
   constructor(private readonly seedService: SeedService) {}
 
   @Mutation( () => String, { name: 'executeSeed', description: 'Executes the construction of the Database'} )
   async executeSeed(
-    @CurrentUser( [ValidRoles.admin] ) adminUser: User,
   ): Promise<string> {
     return this.seedService.executeSeed();
   }

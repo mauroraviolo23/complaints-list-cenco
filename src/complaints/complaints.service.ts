@@ -86,11 +86,11 @@ export class ComplaintsService {
 
   async create( createComplaintInput: CreateComplaintInput, user: User ) : Promise<Complaint> {
 
-    const productDetails: string = createComplaintInput.dateOfPurchase + "," + createComplaintInput.invoiceNumber + "," + createComplaintInput.productCode;
+    const purchaseDetails: string = createComplaintInput.dateOfPurchase + "," + createComplaintInput.invoiceNumber + "," + createComplaintInput.productCode;
     
     const newComplaint = this.complaintsRepository
     .create({
-      details: productDetails,
+      details: purchaseDetails,
       user,
       ...createComplaintInput,
     });
