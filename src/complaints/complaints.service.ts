@@ -113,9 +113,7 @@ export class ComplaintsService {
     
     const complaint = await this.findOne( id, user );
 
-    console.log(complaint);
-
-    return this.complaintsRepository.remove( complaint );
+    return await this.complaintsRepository.remove( complaint );
   }
 
   async complaintCountByUser( user: User ): Promise<number> {
