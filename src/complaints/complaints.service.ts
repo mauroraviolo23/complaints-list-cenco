@@ -4,7 +4,7 @@ import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
 import { ListByUserArgs } from 'src/common/dto/args/list.args';
 import { User } from 'src/users/entities/user.entity';
-import { ILike, Like, Repository } from 'typeorm';
+import { Brackets, ILike, Like, Repository } from 'typeorm';
 import { CreateComplaintInput } from './dto/inputs/create-complaint.input';
 import { UpdateComplaintInput } from './dto/inputs/update-complaint.input';
 import { Complaint } from './entities/complaint.entity';
@@ -26,25 +26,26 @@ export class ComplaintsService {
     // all complaints will be shown. If it were a regular user, only complaints from his authorship would be shown.
 
     if (user.roles.includes(ValidRoles.admin)) {
-      return await this.complaintsRepository.find({
-        take: limit, 
-        skip: offset,
-        where: {
-          title: ILike(`%${ search }%`)
-        }
-      });
+      return await this.complaintsRepository.createQueryBuilder('complaint')
+      .where(new Brackets(qb => {
+        qb.where('complaint.title ILIKE :search', { search: `%${search}%` })
+          .orWhere('complaint.description ILIKE :search', { search: `%${search}%` })
+          .orWhere('1 = 0'); // condición falsa para hacer que la búsqueda sea opcional en ambos campos
+      }))
+      .take(limit)
+      .skip(offset)
+      .getMany();
     }
-
-    return await this.complaintsRepository.find({
-      take: limit, 
-      skip: offset,
-      where: {
-        user: {
-          id: user.id
-        },
-        title: ILike(`%${ search }%`)
-      }
-    });
+    return await this.complaintsRepository.createQueryBuilder('complaint')
+    .where('complaint.user = :userId', { userId: user.id })
+    .andWhere(new Brackets(qb => {
+      qb.where('complaint.title ILIKE :search', { search: `%${search}%` })
+        .orWhere('complaint.description ILIKE :search', { search: `%${search}%` })
+        .orWhere('1 = 0'); // condición falsa para hacer que la búsqueda sea opcional en ambos campos
+    }))
+    .take(limit)
+    .skip(offset)
+    .getMany();
   }
 
   async findAllByUser( user: User, paginationArgs: PaginationArgs, searchArgs: SearchArgs ): Promise<Complaint[]> {
@@ -52,17 +53,18 @@ export class ComplaintsService {
     const { limit, offset } = paginationArgs;
     const { search } = searchArgs;
 
-    return await this.complaintsRepository.find({
-      take: limit, 
-      skip: offset,
-      where: {
-        user: {
-          id: user.id
-        },
-        title: ILike(`%${ search }%`)
-      }
-    });
+    return await this.complaintsRepository.createQueryBuilder('complaint')
+    .where('complaint.user = :userId', { userId: user.id })
+    .andWhere(new Brackets(qb => {
+      qb.where('complaint.title ILIKE :search', { search: `%${search}%` })
+        .orWhere('complaint.description ILIKE :search', { search: `%${search}%` })
+        .orWhere('1 = 0'); // condición falsa para hacer que la búsqueda sea opcional en ambos campos
+    }))
+    .take(limit)
+    .skip(offset)
+    .getMany();
   }
+
 
   async findOne(id: number, user: User): Promise<Complaint> {
 
