@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignUpInput } from 'src/auth/dto/inputs/signup.input';
 import { Repository } from 'typeorm';
-import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';

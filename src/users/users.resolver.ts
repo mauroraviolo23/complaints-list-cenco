@@ -1,7 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int, ID, ResolveField, Parent } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ValidRolesArgs } from './dto/args/roles.arg';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
@@ -11,7 +10,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ComplaintsService } from 'src/complaints/complaints.service';
 import { Complaint } from 'src/complaints/entities/complaint.entity';
 import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
-import { ListByUserArgs } from 'src/common/dto/args/list.args';
 
 @Resolver(() => User)
 @UseGuards( JwtAuthGuard )

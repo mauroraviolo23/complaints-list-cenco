@@ -2,9 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
-import { ListByUserArgs } from 'src/common/dto/args/list.args';
 import { User } from 'src/users/entities/user.entity';
-import { Brackets, ILike, Like, Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { CreateComplaintInput } from './dto/inputs/create-complaint.input';
 import { UpdateComplaintInput } from './dto/inputs/update-complaint.input';
 import { Complaint } from './entities/complaint.entity';
@@ -30,7 +29,7 @@ export class ComplaintsService {
       .where(new Brackets(qb => {
         qb.where('complaint.title ILIKE :search', { search: `%${search}%` })
           .orWhere('complaint.description ILIKE :search', { search: `%${search}%` })
-          .orWhere('1 = 0'); // condición falsa para hacer que la búsqueda sea opcional en ambos campos
+          .orWhere('1 = 0'); // Makes it optional for both "description" and "title" fields
       }))
       .take(limit)
       .skip(offset)
@@ -41,7 +40,7 @@ export class ComplaintsService {
     .andWhere(new Brackets(qb => {
       qb.where('complaint.title ILIKE :search', { search: `%${search}%` })
         .orWhere('complaint.description ILIKE :search', { search: `%${search}%` })
-        .orWhere('1 = 0'); // condición falsa para hacer que la búsqueda sea opcional en ambos campos
+        .orWhere('1 = 0'); // Makes it optional for both "description" and "title" fields
     }))
     .take(limit)
     .skip(offset)
@@ -58,13 +57,12 @@ export class ComplaintsService {
     .andWhere(new Brackets(qb => {
       qb.where('complaint.title ILIKE :search', { search: `%${search}%` })
         .orWhere('complaint.description ILIKE :search', { search: `%${search}%` })
-        .orWhere('1 = 0'); // condición falsa para hacer que la búsqueda sea opcional en ambos campos
+        .orWhere('1 = 0'); // Makes it optional for both "description" and "title" fields
     }))
     .take(limit)
     .skip(offset)
     .getMany();
   }
-
 
   async findOne(id: number, user: User): Promise<Complaint> {
 
@@ -115,7 +113,15 @@ export class ComplaintsService {
     
     const complaint = await this.findOne( id, user );
 
-    return await this.complaintsRepository.remove( complaint );
+    // return await this.complaintsRepository.remove( complaint );
+
+    const removedComplaint = await this.complaintsRepository.remove( complaint );
+
+    removedComplaint.id = id;
+
+    removedComplaint.user = user;
+
+    return removedComplaint;
   }
 
   async complaintCountByUser( user: User ): Promise<number> {
