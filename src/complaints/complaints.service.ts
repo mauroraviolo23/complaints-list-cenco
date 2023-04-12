@@ -113,13 +113,24 @@ export class ComplaintsService {
     
     const complaint = await this.findOne( id, user );
 
-    // return await this.complaintsRepository.remove( complaint );
+    let removedComplaint;
 
-    const removedComplaint = await this.complaintsRepository.remove( complaint );
+    if (user.roles.includes(ValidRoles.admin)) {
+      removedComplaint = await this.complaintsRepository.remove( complaint );
 
-    removedComplaint.id = id;
+      removedComplaint.id = id;
 
-    removedComplaint.user = user;
+      removedComplaint.user = user;
+    } else {
+
+      complaint.solved = true;
+
+      await this.complaintsRepository.save(complaint);
+
+      removedComplaint = complaint;
+    }
+
+    
 
     return removedComplaint;
   }
