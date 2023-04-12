@@ -4,12 +4,12 @@
 
 # Instrucciones
 
-# Development Environment
+Este es un resumen muy conciso de las instrucciones para usar la aplicación. Para información más detallada, por favor leer archivo PDF que se encuentra en la carpeta del repositorio.
 
-1. Clonar el proyecto
-2. Copiar el ```.env.aws.template```, renombrar a ```.env``` 
+# Development Environment
+1. Clonar el repositorio
+2. Copiar el ```.env.aws.template```, renombrar a ```.env``` y agregar la información incluida en el PDF
 3. Ejecutar ```yarn install```
-<!-- 4. Levantar la imagen en Docker Desktop con el comando: ```docker-compose up -d``` Si se quisiera usar en Docker -->
 5. Levantar el Back-End de Nest con el comando: ```yarn start:dev``` 
 6. Visitar el sitio: ```localhost:3000/graphql```
 7. Ejecutar la __'mutacion'__ executeSeed, para ingresar datos de ejemplo en la Base de Datos
